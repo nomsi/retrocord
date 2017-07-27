@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Storage = require('../Storage');
 const timestamp = require('../util/timestamp');
+
 const client = new Discord.Client({
   // some options
 });
