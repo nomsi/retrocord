@@ -23,13 +23,11 @@ function run(ctx) {
     switch (message.channel.type) {
       case 'dm': {
         if (message.author.id === client.user.id) return;
-
         ctx.gui.put(`{yellow-fg}${timestamp(message.createdAt, false)}{/yellow-fg} {bold}${message.author.tag}{/bold} has sent you a message!`);
         break;
       }
       case 'group': {
         if (message.author.id === client.user.id) return;
-
         let dmName = message.channel.name === null ? 'Group' : message.channel.name;
         ctx.gui.put(`{yellow-fg}${timestamp(message.createdAt, false)}{/yellow-fg} {bold}${dmName} has a new message!`);
         break;
