@@ -45,7 +45,7 @@ module.exports = {
           scope.channels
             .filter((c) => c.type === 'text')
             .find((c) => c.name.toLowerCase() === channel.toLowerCase()) :
-          scope._sortedChannels().filter((c) => c.permissionsFor(ctx.discord.user).has('READ_MESSAGES')).first();
+          scope.defaultChannel;
       }
       if (!channel) return ctx.gui.put('{bold}Invalid Channel{/bold}');
       if (channel.recipient || channel.recipients) {
@@ -63,7 +63,9 @@ module.exports = {
         }
         ctx.gui.put(`{bold}Joining #${channel.name} in ${scope.name}{/bold}`);
       }
-      channel.fetchMessages({ limit: 5 });
+      channel.fetchMessages({ limit: 5 }).then((messages) => {
+        ctx.gui.putMessages(messages.array().reverse(), { mdy: true });
+      });
       ctx.current.channel = channel;
       ctx.current.scope = scope;
     },
@@ -85,28 +87,18 @@ module.exports = {
         content: args.join(' '),
         has: args.has,
         authorType: args['author-type'],
-<<<<<<< HEAD
-        limit: args.limit || 10,
-=======
         limit: +args.limit || 10,
->>>>>>> upstream/master
       })
         .then((r) => r.results.map((msgs) => msgs.find((m) => m.hit)))
         .then(async(messages) => {
           ctx.gui.put('{bold}-- BEGIN SEARCH --{/bold}');
           ctx.gui.put(`{bold} Query: ${args.join(' ')}{/bold}`);
-<<<<<<< HEAD
           await ctx.gui.putMessages(messages.reverse(), { mdy: true });
-=======
-          // await ctx.gui.putMessages(messages.reverse(), { mdy: true });
->>>>>>> upstream/master
           ctx.gui.put('{bold}--- END SEARCH ---{/bold}');
         })
         .catch((err) => {
           ctx.gui.put(`{bold}Search Error (${err.message}){/bold}`);
         });
-<<<<<<< HEAD
-=======
     },
   },
   set: {
@@ -138,7 +130,6 @@ module.exports = {
       if (!ctx.current.scope || ctx.current.scope === 'dm') return;
       ctx.gui.put('{bold}Available Channels:{/bold}');
       ctx.gui.put(ctx.current.scope.channels.filter((c) => c.type === 'text').map((g) => g.name).join(', '));
->>>>>>> upstream/master
     },
   },
 };
